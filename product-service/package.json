@@ -4,7 +4,7 @@
   "description": "node --experimental-modules --experimental-vm-modules node_modules/jest/bin/jest.js",
   "main": "handler.js",
   "scripts": {
-    "dep": "serverless deploy",
+    "deploy": "serverless deploy",
     "test": "node --experimental-modules --experimental-vm-modules node_modules/jest/bin/jest.js"
   },
   "keywords": [],
@@ -21,6 +21,5 @@
   "devDependencies": {
     "jest": "^29.0.3",
     "serverless-jest-plugin": "^0.4.0"
-  },
-  "type": "module"
+  } 
 }

@@ -25,16 +25,16 @@ custom:
   jest:  
 
 functions:
-  getProductByID:
-    handler: functions/getProductByID/getProductByID.handler
+  getProductsByID:
+    handler: functions/getProductsByID/getProductsByID.handler
     events:
       - http:
           path: products/{productId}
           method: get
           cors: true
 
-  getAllProducts:
-    handler: functions/getAllProducts/getAllProducts.handler
+  getProductsList:
+    handler: functions/getProductsList/getProductsList.handler
     events:
       - http:
           path: products
