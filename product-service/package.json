@@ -22,9 +22,9 @@
   },
   "devDependencies": {
     "jest": "^29.0.3",
+    "pg": "^8.8.0",
     "serverless-jest-plugin": "^0.4.0",
     "serverless-offline": "^10.1.0",
     "serverless-openapi-documentation": "^0.4.0"
-  },
-  "type": "module"
+  }
 }
