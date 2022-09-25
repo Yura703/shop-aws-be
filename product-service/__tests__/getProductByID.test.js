@@ -18,8 +18,8 @@ describe('getProductsByID', () => {
     expect(count).toBe(5);
     expect(description).toBe("The Beatles - Let It Be [LP] 2020");
     expect(price).toBe(10);
-    expect(imageId).toBe("000000001");
-    expect(title).toBe("Vinyl Records - The Beatles 1970");
+    expect(imageId).toBe("000001");
+    expect(title).toBe("The Beatles 1970");
     expect(statusCode).toBe(200);
   });
 });

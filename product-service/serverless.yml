@@ -25,6 +25,7 @@ custom:
     excludeFiles:  src/** /*.test.js  # Предоставить glob для игнорируемых файлов  
   autoswagger: 
     typefiles: './src/types/product.d.ts'
+    basePath: '/dev'
   jest:  
 
 functions:

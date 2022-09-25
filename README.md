@@ -9,3 +9,6 @@ endpoints:
   GET - https://vrsbboexy5.execute-api.eu-west-1.amazonaws.com/dev/products
   GET - https://b30nsujrnd.execute-api.eu-west-1.amazonaws.com/swagger
   GET - https://b30nsujrnd.execute-api.eu-west-1.amazonaws.com/swagger.json
+
+
+P.S. task-3 Для запуска тестов в paskage.json надо "type": "module". Для деплоя удалять.
