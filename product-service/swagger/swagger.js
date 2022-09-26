@@ -2,7 +2,7 @@
             module.exports = {
   "swagger": "2.0",
   "info": {
-    "title": "product-service",
+    "title": "Music-Shop API",
     "version": "1"
   },
   "paths": {
@@ -29,7 +29,12 @@
           "200": {
             "description": "200 response"
           }
-        }
+        },
+        "security": [
+          {
+            "Access-Control-Allow-Origin": []
+          }
+        ]
       }
     },
     "/products": {
@@ -48,11 +53,23 @@
           "200": {
             "description": "200 response"
           }
-        }
+        },
+        "security": [
+          {
+            "Access-Control-Allow-Origin": []
+          }
+        ]
       }
     }
   },
   "definitions": {},
-  "securityDefinitions": {},
-  "basePath": "/dev"
+  "securityDefinitions": {
+    "Access-Control-Allow-Origin": {
+      "type": "apiKey",
+      "name": "Access-Control-Allow-Origin",
+      "in": "header"
+    }
+  },
+  "basePath": "/dev",
+  "host": "vrsbboexy5.execute-api.eu-west-1.amazonaws.com"
 };

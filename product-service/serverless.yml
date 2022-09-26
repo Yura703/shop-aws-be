@@ -24,8 +24,13 @@ custom:
     packager:  'npm'  # Packager, который будет использоваться для упаковки ваших внешних модулей 
     excludeFiles:  src/** /*.test.js  # Предоставить glob для игнорируемых файлов  
   autoswagger: 
-    typefiles: './src/types/product.d.ts'
+    typefiles: ['./src/types/product.d.ts']
     basePath: '/dev'
+    title: 'Music-Shop API'
+    generateSwaggerOnDeploy: true
+    useStage: true
+    apiKeyHeaders: 'Access-Control-Allow-Origin'
+    host: 'vrsbboexy5.execute-api.eu-west-1.amazonaws.com'
   jest:  
 
 functions:
