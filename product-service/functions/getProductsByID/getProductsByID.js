@@ -59,12 +59,12 @@ const Client = new AWS.DynamoDB.DocumentClient();
 const tableName = 'ProductsTable';
 
 export const handler = async event => {
-  const id = event.pathParameters.id;
+  const _id = event.pathParameters.id;
 
   const output = await Client.get({
     TableName: tableName,
     Key: {
-      productId: id
+      id: _id
     }
   }).promise()
 

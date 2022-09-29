@@ -8,8 +8,19 @@ provider:
   stage: dev
   region: eu-west-1
 
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource: "*"
+
 plugins:
-  - serverless-auto-swagger
+  # - serverless-auto-swagger
   - serverless-webpack
   - serverless-jest-plugin  
   - serverless-offline
@@ -23,16 +34,16 @@ custom:
     webpack includeModules:  false  # Конфигурация модулей узла для упаковки 
     packager:  'npm'  # Packager, который будет использоваться для упаковки ваших внешних модулей 
     excludeFiles:  src/** /*.test.js  # Предоставить glob для игнорируемых файлов  
-  autoswagger: 
-    typefiles: './src/types/product.d.ts'
-  jest:  
+  # autoswagger: 
+  #   typefiles: './src/types/product.d.ts'
+  # jest:  
 
 functions:
   getProductsByID:
     handler: functions/getProductsByID/getProductsByID.handler
     events:
       - http:
-          path: products/{productId}
+          path: products/{id}
           method: get
           cors: true
 
@@ -52,14 +63,14 @@ functions:
           method: post
           cors: true             
 
-environment:
-  TABLE_NAME:
-    Ref: products
-  # PG_HOST: music-shop.cq7elyimyrte.eu-west-1.rds.amazonaws.com
-  # PG_PORT: 5432
-  # PG_DATABASE: shop
-  # PG_USERNAME: postgres
-  # PG_PASSWORD: zE3fgXD74JNejiqARGo7  
+# environment:
+#   TABLE_NAME:
+#     Ref: ProductsTable
+#   # PG_HOST: music-shop.cq7elyimyrte.eu-west-1.rds.amazonaws.com
+#   # PG_PORT: 5432
+#   # PG_DATABASE: shop
+#   # PG_USERNAME: postgres
+#   # PG_PASSWORD: zE3fgXD74JNejiqARGo7  
 
 resources:
   Resources:
@@ -77,15 +88,3 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1  
 
-iamRoleStatements:
-  - Effect: Allow
-    Action:
-      - dynamodb:DescribeTable
-      - dynamodb:Query
-      - dynamodb:Scan
-      - dynamodb:GetItem
-      - dynamodb:PutItem
-      - dynamodb:UpdateItem
-      - dynamodb:DeleteItem
-    Resource:
-      - "Fn::GetAtt": [products, Arn]          
