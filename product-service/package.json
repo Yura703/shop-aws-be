@@ -17,6 +17,7 @@
     "serverless-auto-swagger": "^2.8.2",
     "serverless-webpack": "^5.9.1",
     "tsconfig-paths-webpack-plugin": "^4.0.0",
+    "uuid": "^9.0.0",
     "webpack": "^5.74.0",
     "webpack-node-externals": "^3.0.0"
   },

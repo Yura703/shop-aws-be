@@ -1,5 +1,5 @@
 //import products from '../productList.json';
-import { Client } from 'pg';
+/*import { Client } from 'pg';
 
 const { PG_HOST, PG_PORT, PG_DATABASE, PG_USERNAME, PG_PASSWORD } = process.env;
 const dbOptions = {
@@ -39,4 +39,22 @@ export const handler = async event => {
   } finally {
     client.end();
   }
-}
+}*/
+
+
+import AWS from 'aws-sdk';
+
+const Client = new AWS.DynamoDB.DocumentClient();
+const tableName = 'ProductsTable';
+
+export const handler = async event => {
+ 
+  const output = await Client.scan({
+    TableName: tableName,
+  }).promise()
+
+  return {
+    statusCode: 200,
+    body: JSON.stringify(output.Items)
+  };  
+} 
