@@ -45,16 +45,32 @@ export const handler = async event => {
 import AWS from 'aws-sdk';
 
 const Client = new AWS.DynamoDB.DocumentClient();
-const tableName = 'ProductsTable';
 
 export const handler = async event => {
- 
-  const output = await Client.scan({
-    TableName: tableName,
+ try {  
+  const outputProduct = await Client.scan({
+    TableName: 'Products',
   }).promise()
+
+  const outputStocks = await Client.scan({
+    TableName: 'Stocks',
+  }).promise()
+
+  for (let i = 0; i < outputProduct.length; i++) {
+    const { count } = outputStocks[i].Item;
+    outputProduct[i].Item = { ...outputProduct[i].Item, count }; 
+  }
+  console.log(outputProduct.Items);
 
   return {
     statusCode: 200,
-    body: JSON.stringify(output.Items)
-  };  
+    body: JSON.stringify(outputProduct.Items)
+  }; 
+
+ } catch (error) {
+  return {
+    statusCode: 500,
+    body: JSON.stringify({ error: "Something went wrong" })
+  }; 
+ }   
 } 

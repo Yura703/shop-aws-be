@@ -74,10 +74,10 @@ functions:
 
 resources:
   Resources:
-    ProductsTable:
+    Products:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: ProductsTable
+        TableName: Products
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: S
@@ -88,3 +88,16 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1  
 
+    Stocks:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: Stocks
+        AttributeDefinitions:
+          - AttributeName: product_id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: product_id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1     

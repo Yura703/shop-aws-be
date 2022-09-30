@@ -56,25 +56,48 @@ export const handler = async event => {
 import AWS from 'aws-sdk';
 
 const Client = new AWS.DynamoDB.DocumentClient();
-const tableName = 'ProductsTable';
 
 export const handler = async event => {
-  const _id = event.pathParameters.id;
 
-  const output = await Client.get({
-    TableName: tableName,
-    Key: {
-      id: _id
-    }
-  }).promise()
+  try {
+    const _id = event.pathParameters.id;
+    console.log(_id);
 
-  if (!output.Item) {
+    const outputProduct = await Client.get({
+      TableName: 'Products',
+      Key: {
+        id: _id
+      }
+    }).promise()
+
+    const outputStocks = await Client.get({
+      TableName: 'Stocks',
+      Key: {
+        product_id: _id
+      }
+    }).promise()
+
+    if (outputProduct.Item && outputStocks.Item) {
+      const { count } = outputStocks.Item;
+      console.log({...outputProduct.Item, count});
+
+      return {
+        statusCode: 200,
+        body: JSON.stringify({...outputProduct.Item, count} ),      
+      }      
+    } else return {
+        statusCode: 404,
+        body: JSON.stringify({ error: 'Product not found' })
+    };
+
+  } catch (error) {
     return {
-      statusCode: 404,
-      body: JSON.stringify({ error: 'product not found' })
+      statusCode: 500,
+      body: JSON.stringify({ error: "Something went wrong" })
     }
-  } else return {
-    statusCode: 200,
-    body: JSON.stringify(output.Item),
-  };
+    
+  }
+  
+    
+    
 } 
