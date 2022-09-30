@@ -34,10 +34,7 @@ custom:
     webpack includeModules:  false  # Конфигурация модулей узла для упаковки 
     packager:  'npm'  # Packager, который будет использоваться для упаковки ваших внешних модулей 
     excludeFiles:  src/** /*.test.js  # Предоставить glob для игнорируемых файлов  
-  # autoswagger: 
-  #   typefiles: './src/types/product.d.ts'
-  # jest:  
-
+  
 functions:
   getProductsByID:
     handler: functions/getProductsByID/getProductsByID.handler
@@ -61,16 +58,15 @@ functions:
       - http:
           path: products
           method: post
-          cors: true             
+          cors: true    
 
-# environment:
-#   TABLE_NAME:
-#     Ref: ProductsTable
-#   # PG_HOST: music-shop.cq7elyimyrte.eu-west-1.rds.amazonaws.com
-#   # PG_PORT: 5432
-#   # PG_DATABASE: shop
-#   # PG_USERNAME: postgres
-#   # PG_PASSWORD: zE3fgXD74JNejiqARGo7  
+  writeDataInDB:
+    handler: functions/writeDataInDB/writeDataInDB.handler
+    events:
+      - http:
+          path: init
+          method: get
+          cors: true     
 
 resources:
   Resources:
