@@ -26,7 +26,9 @@ plugins:
   - serverless-offline
 
 package:
-  individually: true
+  # individually: true
+  patterns:
+    - 'node_modules/uuid/**'
 
 custom: 
   webpack: 
@@ -66,7 +68,15 @@ functions:
       - http:
           path: init
           method: get
-          cors: true     
+          cors: true   
+
+  test:
+    handler: test.handler
+    events:
+      - http:
+          path: test
+          method: get
+          cors: true  
 
 resources:
   Resources:

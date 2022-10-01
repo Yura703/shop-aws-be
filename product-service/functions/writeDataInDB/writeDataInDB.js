@@ -1,5 +1,4 @@
 import AWS from 'aws-sdk';
-//import { v4 } from 'uuid';
 
 const products = [
   {
