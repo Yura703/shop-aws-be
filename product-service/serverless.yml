@@ -70,13 +70,13 @@ functions:
           method: get
           cors: true   
 
-  test:
-    handler: test.handler
-    events:
-      - http:
-          path: test
-          method: get
-          cors: true  
+  # test:
+  #   handler: test.handler
+  #   events:
+  #     - http:
+  #         path: test
+  #         method: get
+  #         cors: true  
 
 resources:
   Resources:

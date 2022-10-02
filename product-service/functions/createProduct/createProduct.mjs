@@ -1,5 +1,5 @@
 import AWS from 'aws-sdk';
-//import { v4 } from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 
 const Client = new AWS.DynamoDB.DocumentClient();
 
@@ -19,7 +19,7 @@ export const handler = async event => {
  
     const product = {
       ...rest,
-      id: Date.now().toString(),
+      id: uuidv4(),
     };  
     
     const stocks = {    
@@ -38,6 +38,11 @@ export const handler = async event => {
     }).promise();
 
     return {
+      headers: {
+        'Content-Type': 'application/json',      
+        'Access-Control-Allow-Methods': '*',
+        'Access-Control-Allow-Origin': '*',
+      },
       statusCode: 201,
       body: JSON.stringify(product) + "\n" + JSON.stringify(stocks),
     };

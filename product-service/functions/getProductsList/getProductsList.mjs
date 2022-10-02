@@ -15,9 +15,14 @@ export const handler = async event => {
   const arr = outputProduct.Items;
   
   return {
+    headers: {
+      'Content-Type': 'application/json',      
+      'Access-Control-Allow-Methods': '*',
+      'Access-Control-Allow-Origin': '*',
+    },
     statusCode: 200,
     body: JSON.stringify(arr.map((item, index) => {
-      return {...item, ...outputStocks.Items[index]}
+      return {...item, "count": (outputStocks.Items[index]).count}
     }))
   }; 
 

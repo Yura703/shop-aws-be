@@ -1,4 +1,5 @@
 import AWS from 'aws-sdk';
+import { v4 as uuidv4 } from 'uuid';
 
 const products = [
   {
@@ -69,7 +70,7 @@ export const handler = async event => {
 
       const product = {
         ...rest,
-        id: Date.now().toString(),
+        id: uuidv4(),
       };  
       
       const stocks = {    
