@@ -1,0 +1,51 @@
+app: product-service
+service: product-service
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  stage: dev
+  region: eu-west-1
+
+plugins:
+  - serverless-auto-swagger
+  - serverless-webpack
+  - serverless-jest-plugin  
+  - serverless-offline
+
+package:
+  individually: true
+
+custom: 
+  webpack: 
+    webpackConfig:  'webpack.config.js'  # Имя файла конфигурации 
+    webpack includeModules:  false  # Конфигурация модулей узла для упаковки 
+    packager:  'npm'  # Packager, который будет использоваться для упаковки ваших внешних модулей 
+    excludeFiles:  src/** /*.test.js  # Предоставить glob для игнорируемых файлов  
+  autoswagger: 
+    typefiles: ['./src/types/product.d.ts']
+    basePath: '/dev'
+    title: 'Music-Shop API'
+    generateSwaggerOnDeploy: true
+    useStage: true
+    apiKeyHeaders: 'Access-Control-Allow-Origin'
+    host: 'vrsbboexy5.execute-api.eu-west-1.amazonaws.com'
+  jest:  
+
+functions:
+  getProductsByID:
+    handler: functions/getProductsByID/getProductsByID.handler
+    events:
+      - http:
+          path: products/{productId}
+          method: get
+          cors: true
+
+  getProductsList:
+    handler: functions/getProductsList/getProductsList.handler
+    events:
+      - http:
+          path: products
+          method: get
+          cors: true      
