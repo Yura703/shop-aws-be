@@ -8,14 +8,27 @@ provider:
   stage: dev
   region: eu-west-1
 
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource: "*"
+
 plugins:
-  - serverless-auto-swagger
+  # - serverless-auto-swagger
   - serverless-webpack
   - serverless-jest-plugin  
   - serverless-offline
 
 package:
-  individually: true
+  # individually: true
+  patterns:
+    - 'node_modules/uuid/**'
 
 custom: 
   webpack: 
@@ -23,22 +36,13 @@ custom:
     webpack includeModules:  false  # Конфигурация модулей узла для упаковки 
     packager:  'npm'  # Packager, который будет использоваться для упаковки ваших внешних модулей 
     excludeFiles:  src/** /*.test.js  # Предоставить glob для игнорируемых файлов  
-  autoswagger: 
-    typefiles: ['./src/types/product.d.ts']
-    basePath: '/dev'
-    title: 'Music-Shop API'
-    generateSwaggerOnDeploy: true
-    useStage: true
-    apiKeyHeaders: 'Access-Control-Allow-Origin'
-    host: 'vrsbboexy5.execute-api.eu-west-1.amazonaws.com'
-  jest:  
-
+  
 functions:
   getProductsByID:
     handler: functions/getProductsByID/getProductsByID.handler
     events:
       - http:
-          path: products/{productId}
+          path: products/{id}
           method: get
           cors: true
 
@@ -48,4 +52,58 @@ functions:
       - http:
           path: products
           method: get
-          cors: true      
+          cors: true  
+
+  createProduct:
+    handler: functions/createProduct/createProduct.handler
+    events:
+      - http:
+          path: products
+          method: post
+          cors: true    
+
+  writeDataInDB:
+    handler: functions/writeDataInDB/writeDataInDB.handler
+    events:
+      - http:
+          path: init
+          method: get
+          cors: true   
+
+  # test:
+  #   handler: test.handler
+  #   events:
+  #     - http:
+  #         path: test
+  #         method: get
+  #         cors: true  
+
+resources:
+  Resources:
+    Products:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: Products
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1  
+
+    Stocks:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: Stocks
+        AttributeDefinitions:
+          - AttributeName: product_id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: product_id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1     

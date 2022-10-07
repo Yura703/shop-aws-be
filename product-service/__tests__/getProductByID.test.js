@@ -6,7 +6,7 @@ describe('getProductsByID', () => {
 
   it('get Product By ID test', async () => {
     const event = {
-      pathParameters: {productId: "7567ec4b-b10c-48c5-9345-fc73c48a80aa"},
+      pathParameters: {: "7567ec4b-b10c-48c5-9345-fc73c48a80aa"},
     }
     const response = await handler(event);
 

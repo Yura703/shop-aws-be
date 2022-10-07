@@ -13,18 +13,21 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "babel-loader": "^8.2.5",
     "serverless": "^3.22.0",
     "serverless-auto-swagger": "^2.8.2",
+    "serverless-plugin-include-dependencies": "^4.1.0",
     "serverless-webpack": "^5.9.1",
     "tsconfig-paths-webpack-plugin": "^4.0.0",
+    "uuid": "^9.0.0",
     "webpack": "^5.74.0",
     "webpack-node-externals": "^3.0.0"
   },
   "devDependencies": {
     "jest": "^29.0.3",
+    "pg": "^8.8.0",
     "serverless-jest-plugin": "^0.4.0",
     "serverless-offline": "^10.1.0",
     "serverless-openapi-documentation": "^0.4.0"
-  },
-  "type": "module"
+  }
 }
