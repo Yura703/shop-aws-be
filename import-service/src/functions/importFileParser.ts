@@ -1,5 +1,5 @@
 
-import { middyfy } from "../../libs/lambda";
+import { middyfy } from "../libs/lambda";
 import { S3Event } from "aws-lambda";
 import AWS from "aws-sdk";
 import parser from "csv-parser";

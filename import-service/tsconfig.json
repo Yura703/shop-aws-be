@@ -12,7 +12,6 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
-    "types": ["jest", "node"],
     "outDir": "lib"
   },
   "include": ["src/**/*.ts", "serverless.ts"],

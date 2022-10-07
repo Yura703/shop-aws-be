@@ -1,6 +1,6 @@
 import AWS from "aws-sdk";
 import { APIGatewayProxyEvent } from 'aws-lambda';
-import { middyfy } from "../../libs/lambda";
+import { middyfy } from "../libs/lambda";
 
 const BUCKET = "yura703-task5";
 

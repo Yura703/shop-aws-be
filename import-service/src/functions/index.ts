@@ -2,7 +2,7 @@ import { handlerPath } from '@libs/handler-resolver';
 const BUCKET = "yura703-task5";
 
 export const importProductsFile = {
-  handler: `${handlerPath(__dirname)}/importProductsFile/importProductsFile.main`,
+  handler: `${handlerPath(__dirname)}/importProductsFile.main`,
   events: [
     {
       httpApi: {
@@ -14,7 +14,7 @@ export const importProductsFile = {
 };
 
 export const importFileParser = {
-  handler: `${handlerPath(__dirname)}/importFileParser/importFileParser.main`,
+  handler: `${handlerPath(__dirname)}/importFileParser.main`,
   events: [
     {
       s3: {

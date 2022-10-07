@@ -4,7 +4,7 @@
   "description": "Serverless aws-nodejs-typescript template",
   "main": "serverless.ts",
   "scripts": {
-    "deploy": "serverless deploy",
+    "deploy": "serverless deploy --verbose",
     "test": "node --experimental-modules --experimental-vm-modules node_modules/jest/bin/jest.js",
     "offline": "sls offline --noPrependStageInUrl",
     "offline-start": "serverless offline start"
