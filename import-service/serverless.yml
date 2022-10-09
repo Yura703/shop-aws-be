@@ -5,7 +5,11 @@ useDotenv: true
 
 custom:
   bucketName: yura703-task5
-  jest:
+  webpack: 
+    webpackConfig:  'webpack.config.js'  # Имя файла конфигурации 
+    webpack includeModules:  false  # Конфигурация модулей узла для упаковки 
+    packager:  'npm'  # Packager, который будет использоваться для упаковки ваших внешних модулей 
+    excludeFiles:  src/** /*.test.js  # Предоставить glob для игнорируемых файлов  
 
 provider:
   name: aws
@@ -27,6 +31,7 @@ provider:
         - arn:aws:s3:::yura703-task5/*
 
 plugins:
+  - serverless-webpack
   - serverless-jest-plugin  
 
 package:
@@ -34,7 +39,7 @@ package:
 
 functions:
   importProductsFile:
-    handler: functions/importProductsFile.importProductsFile
+    handler: src/functions/importProductsFile.importProductsFile
     events:
       - http:
           path: /import
@@ -46,7 +51,7 @@ functions:
                 name: true
 
   importFileParser:
-    handler: functions/importFileParser.importFileParser
+    handler: src/functions/importFileParser.importFileParser
     events:
       - s3: 
         bucket: yura703-task5
@@ -54,5 +59,6 @@ functions:
         rules:
           - prefix: uploaded/
         existing: true         
+  
   
   

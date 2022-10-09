@@ -1,10 +1,9 @@
 import AWS from "aws-sdk";
-import { APIGatewayProxyEvent } from 'aws-lambda';
 import { middyfy } from "../libs/lambda";
 
 const BUCKET = "yura703-task5";
 
-export const importProductsFile = async (event: APIGatewayProxyEvent) => {
+export const importProductsFile = async (event) => {
   const s3 = new AWS.S3({ region: "eu-west-1" });
   const { name } = event.queryStringParameters;
   const params = {
