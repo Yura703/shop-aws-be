@@ -5,6 +5,7 @@
   "main": "serverless.ts",
   "scripts": {
     "deploy": "serverless deploy --verbose",
+    "test1": "jest",
     "test": "node --experimental-modules --experimental-vm-modules node_modules/jest/bin/jest.js",
     "offline": "sls offline --noPrependStageInUrl",
     "offline-start": "serverless offline start"
