@@ -33,18 +33,9 @@ export const importFileParser = async (event: S3Event) => {
           }, () => {
             console.log('Send message - ' + item);
           }
-        );
-
-        callback(null, {
-          statusCode: 200,
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Credentials": true,
-          },
-        });
-
-        //results.push(item)
-      }).on("end", async () => {
+        );        
+      })
+      .on("end", async () => {
         console.log(JSON.stringify(results));
 
         await s3.copyObject({ 

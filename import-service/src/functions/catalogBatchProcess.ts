@@ -1,59 +1,75 @@
+import { SQSEvent } from "aws-lambda";
 import AWS from "aws-sdk";
-import { Client } from "pg";
+import { v4 as uuidv4 } from 'uuid';
 
-const { PG_HOST, PG_PORT, PG_DATABASE, PG_USERNAME, PG_PASSWORD } = process.env;
+const Client = new AWS.DynamoDB.DocumentClient();
 
-const dbOptions = {
-  host: PG_HOST,
-  port: PG_PORT,
-  database: PG_DATABASE,
-  user: PG_USERNAME,
-  password: PG_PASSWORD,
-  ssl: {
-    rejectUnauthorized: false,
-  },
-  connectionTimeoutMillis: 5000,
-};
-
-export const catalogBatchProcess = async (event) => {
-  const client = new Client(dbOptions);
-  const sns = new AWS.SNS({ region: "eu-west-1" });
-  const bodyEvent = await event.Records.map(({ body }) => body);
-
-  await client.connect();
-
-  for (let data of bodyEvent) {
-    const { price, title, description, count } = JSON.parse(data);
-    
-    const queryResult = await client.query(`insert into products ( title, description, price) values ('${title}', '${description}', '${price}') returning id`);
-    const productId = queryResult.rows[0].id;      
-
-    await client.query(`insert into stocks (product_id, count) values ('${productId}', '${count}')`);
-
-    sns.publish({
-        Subject: "Added new record",
-        Message: JSON.stringify(bodyEvent),
-        TopicArn: process.env.SNS_ARN,
-      },
-      () => {
-        console.log("EMAIL:" + JSON.stringify(bodyEvent));
-      }
-    );
-
-    return {
-      statusCode: 201,
-      headers: {
-        "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": true,    
-        "Content-Type": "application/JSON",
-        "Access-Control-Allow-Headers": "Content-Type",              
-      },
-      body: JSON.stringify(bodyEvent),
-
-      isBase64Encoded: false,
-    };
-  }
+export const catalogBatchProcess = async (event: SQSEvent) => {
   
-  client.end();  
-};
+  const sns = new AWS.SNS({ region: "eu-west-1" });
+  const bodyEvent = await event.Records.map(({ body }) => JSON.parse(body));
+ 
+  for await (let data of bodyEvent) {    
+    try {   
+      const {count, ...rest} = data;
+
+      const product = {
+        ...rest,
+        id: uuidv4(),
+      };  
+      
+      const stocks = {    
+          count,
+          product_id: product.id,
+      }    
+
+      await Client.put({
+        TableName: 'Products',    
+        Item: product,
+      }).promise();
+  
+      await Client.put({
+        TableName: 'Stocks',    
+        Item: stocks,
+      }).promise(); 
+      
+      sns.publish({
+        Subject: "Added new record",
+        Message: JSON.stringify(data),
+        TopicArn: process.env.SNS_ARN,
+        MessageAttributes: {
+            countCategory: {
+              DataType: 'String',
+              StringValue: data.count >= 5 ? 'High' : 'Low',
+            },
+          },
+        },
+        () => {
+          console.log("EMAIL:" + JSON.stringify(bodyEvent));
+        }
+      );
+    } catch (error) {
+      return {
+        statusCode: 500,
+        body: JSON.stringify({ error: "Something went wrong" })
+      };     
+    } 
+  }    
+
+  
+
+  return {
+    statusCode: 201,
+    headers: {
+      "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Credentials": true,    
+      "Content-Type": "application/JSON",
+      "Access-Control-Allow-Headers": "Content-Type",              
+    },
+    body: JSON.stringify(bodyEvent),
+
+    isBase64Encoded: false,
+  };
+} 
+ 

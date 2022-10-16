@@ -6,10 +6,11 @@ useDotenv: true
 custom:
   bucketName: yura703-task5
   webpack: 
-    webpackConfig:  'webpack.config.js'  # Имя файла конфигурации 
-    webpack includeModules:  false  # Конфигурация модулей узла для упаковки 
-    packager:  'npm'  # Packager, который будет использоваться для упаковки ваших внешних модулей 
-    excludeFiles:  src/** /*.test.js  # Предоставить glob для игнорируемых файлов  
+    webpackConfig:  './webpack.config.js'  # Имя файла конфигурации 
+    includeModules: true
+    # webpack includeModules:  false  # Конфигурация модулей узла для упаковки 
+    # packager:  'npm'  # Packager, который будет использоваться для упаковки ваших внешних модулей 
+    # excludeFiles:  src/** /*.test.js  # Предоставить glob для игнорируемых файлов  
 
 provider:
   name: aws
@@ -19,21 +20,21 @@ provider:
   lambdaHashingVersion: 20201221
 
   iamRoleStatements:
-    - Effect: "Allow"
-      Action: 's3:PutObject'
+    - Effect: Allow
+      Action: s3:ListBucket
       Resource:
         - arn:aws:s3:::yura703-task5
-    - Effect: "Allow"
+    - Effect: Allow
       Action:
-        - "s3:*"
+        - s3:*
       Resource:
         - arn:aws:s3:::yura703-task5/*
-    - Effect: 'Allow'
-      Action: 'sqs:*'
+    - Effect: Allow
+      Action: sqs:*
       Resource:
         - Fn::GetAtt: [SQSQueue, Arn]
-    - Effect: 'Allow'
-      Action: 'sns:*'
+    - Effect: Allow
+      Action: sns:*
       Resource:
         Ref: SNSTopic      
 
@@ -65,20 +66,33 @@ resources:
       Type: AWS::SNS::Topic
       Properties:
         TopicName: yura703-topic
-    SNSSsubscription:
+    SNSHighCountSubscription:
       Type: AWS::SNS::Subscription
       Properties:
         Endpoint: lyurik1978@gmail.com 
         Protocol: email
         TopicArn:
-          Ref: SNSTopic    
+          Ref: SNSTopic   
+        FilterPolicy:
+          countCategory:
+            - High   
+    SNSLowCountSubscription:
+      Type: AWS::SNS::Subscription
+      Properties:        
+        Endpoint: lyurik1978@tut.by 
+        Protocol: email
+        TopicArn:
+          Ref: SNSTopic
+        FilterPolicy:
+          countCategory:
+            - Low        
 
 functions:
   importProductsFile:
     handler: src/functions/importProductsFile.importProductsFile
     events:
       - http:
-          path: import
+          path: /import
           method: get
           cors: true
           request:
@@ -100,7 +114,7 @@ functions:
     handler: functions/catalogBatchProcess.catalogBatchProcess
     events:
       - sqs:
-          batchSize: 4
+          batchSize: 5
           arn:
             Fn::GetAtt:
               - SQSQueue
