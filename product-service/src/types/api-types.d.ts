@@ -3,14 +3,16 @@ export  interface IProduct {
   title: string,
   description: string,
   price: number,
-  count: number
+  count: number,
+  imageId: string
 }
 
 export interface INewProduct {
   title: string,
   description: string,
   price: number,
-  count: number
+  count: number,
+  imageId: string
 }
 
 export interface IProducts {
