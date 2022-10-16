@@ -1,4 +1,4 @@
-import { catalogBatchProcess } from "@functions/catalogBatchProcess";
+import { catalogBatchProcess } from "../functions/catalogBatchProcess";
 import { SQSEvent } from "aws-lambda";
 
 describe('CatalogBatchProcess test', () => {
@@ -11,11 +11,12 @@ describe('CatalogBatchProcess test', () => {
             description: 'description',
             price: 100,
             count: 5,
+            imageId: "123",
           }),
         },
       ],
     } as SQSEvent);
 
-    expect(response?.statusCode).toBe(200);
+    expect(response?.statusCode).toBe(201);
   });
 });

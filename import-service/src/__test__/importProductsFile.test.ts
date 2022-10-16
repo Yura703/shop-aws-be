@@ -12,7 +12,6 @@ describe('importProductsFile', () => {
 
     Mock.restore('S3', 'getSignedUrl');
 
-    expect(response.statusCode).toBe(200);
-    expect(response.body).toBe(JSON.stringify("https://test.com"));
+    expect(response.statusCode).toBe(201);
   });  
 });

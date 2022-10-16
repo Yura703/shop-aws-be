@@ -111,7 +111,7 @@ functions:
         existing: true       
 
   catalogBatchProcess:
-    handler: functions/catalogBatchProcess.catalogBatchProcess
+    handler: src/functions/catalogBatchProcess.catalogBatchProcess
     events:
       - sqs:
           batchSize: 5

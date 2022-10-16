@@ -17,21 +17,22 @@ export const catalogBatchProcess = async (event: SQSEvent) => {
         ...rest,
         id: uuidv4(),
       };  
-      
+            
       const stocks = {    
           count,
           product_id: product.id,
       }    
-
+      
       await Client.put({
         TableName: 'Products',    
         Item: product,
-      }).promise();
-  
+      });
+      
       await Client.put({
         TableName: 'Stocks',    
         Item: stocks,
-      }).promise(); 
+      }); 
+      
       
       sns.publish({
         Subject: "Added new record",
@@ -43,9 +44,6 @@ export const catalogBatchProcess = async (event: SQSEvent) => {
               StringValue: data.count >= 5 ? 'High' : 'Low',
             },
           },
-        },
-        () => {
-          console.log("EMAIL:" + JSON.stringify(bodyEvent));
         }
       );
     } catch (error) {
