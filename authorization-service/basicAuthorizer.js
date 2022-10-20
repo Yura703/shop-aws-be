@@ -1,5 +1,3 @@
-import { Buffer } from 'buffer';
-
 export const handler = async (event, ctx, cb) => {
 
   console.log('Event: ', JSON.stringify(event));
@@ -12,7 +10,7 @@ export const handler = async (event, ctx, cb) => {
     const encodedCreds = authorizationToken.split(' ')[1];
     const buff = Buffer.from(encodedCreds, 'base64'); 
     
-    const plainCreds = buff.toString('utf-8').split('=');
+    const plainCreds = buff.toString('utf-8').split(':');
     
     const username = plainCreds[0];
     const password = plainCreds[1];    
@@ -22,7 +20,8 @@ export const handler = async (event, ctx, cb) => {
     const storedUserPassword = process.env[username];
     
     const effect = !storedUserPassword || storedUserPassword !== password ? 'Deny' : 'Allow';
-   
+    console.log('effect =', effect);
+    
     const policy = generatePolicy(encodedCreds, event.methodArn, effect);
 
     cb(null, policy);

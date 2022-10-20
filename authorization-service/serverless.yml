@@ -3,10 +3,10 @@ frameworkVersion: '3'
 useDotenv: true
 
 custom:
-  bucketName: yura703-task5
   webpack: 
-    webpackConfig:  './webpack.config.js'  # Имя файла конфигурации 
+    webpackConfig:  'webpack.config.js'  # Имя файла конфигурации 
     includeModules: true
+    packager: 'npm'
 
 provider:
   name: aws
@@ -20,18 +20,18 @@ provider:
 
 plugins:
   - serverless-webpack
-  - serverless-plugin-common-excludes # this should go before serverless-plugin-include-dependencies
-  - serverless-plugin-include-dependencies 
+  # - serverless-plugin-common-excludes # this should go before serverless-plugin-include-dependencies
+  # - serverless-plugin-include-dependencies 
   - serverless-dotenv-plugin
 
 package:
-  patterns:
-    - '!node_modules/**' # no need to add this, this plugin does it for you
+  # patterns:
+  #   - '!node_modules/**' # no need to add this, this plugin does it for you
   individually: true
-  excludeDevDependencies: false
+  # excludeDevDependencies: false
 
 functions:
   functions:
   basicAuthorizer:
-    handler: src/functions/basicAuthorizer.handler   
+    handler: basicAuthorizer.handler   
   
