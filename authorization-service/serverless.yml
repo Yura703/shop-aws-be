@@ -1,4 +1,3 @@
-app:  import-service
 service: authorization-service
 frameworkVersion: '3'
 useDotenv: true
@@ -15,6 +14,9 @@ provider:
   stage: dev
   region: eu-west-1 
   lambdaHashingVersion: 20201221  
+  environment: {
+      yura703: process.env.yura703
+    }
 
 plugins:
   - serverless-webpack

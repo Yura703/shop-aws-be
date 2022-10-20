@@ -5,6 +5,8 @@ yura703
 
 endpoints:
 
+  authentication - GET - https://vnpgfxqgkj.execute-api.eu-west-1.amazonaws.com/dev/token
+
   import - GET - https://vnpgfxqgkj.execute-api.eu-west-1.amazonaws.com/dev/import
 
   get by id:   GET - https://b4eddij4ge.execute-api.eu-west-1.amazonaws.com/dev/products/{id}
