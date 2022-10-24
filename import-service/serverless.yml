@@ -42,7 +42,16 @@ provider:
     SQL_URL:
       Ref: SQSQueue
     SNS_ARN:
-      Ref: SNSTopic       
+      Ref: SNSTopic    
+
+  httpApi:
+    authorizers:
+      basicAuthorizer:
+        name: basicAuthorizer
+        identitySource: $request.header.Authorization
+        resultTtlInSeconds: 0
+        functionArn: arn:aws:lambda:eu-west-1:188030080420:function:authorization-service-dev-basicAuthorizer 
+        type: request  
 
 plugins:
   - serverless-webpack
@@ -99,6 +108,8 @@ functions:
             parameters:
               querystrings:
                 name: true
+          authorizer:
+           name: basicAuthorizer      
 
   importFileParser:
     handler: src/functions/importFileParser.importFileParser
