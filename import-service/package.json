@@ -5,6 +5,7 @@
   "main": "serverless.ts",
   "scripts": {
     "deploy": "serverless deploy --verbose",
+    "test1": "jest",
     "test": "node --experimental-modules --experimental-vm-modules node_modules/jest/bin/jest.js",
     "offline": "sls offline --noPrependStageInUrl",
     "offline-start": "serverless offline start"
@@ -16,13 +17,16 @@
     "@middy/core": "^2.5.3",
     "@middy/http-json-body-parser": "^2.5.3",
     "aws-sdk": "^2.1230.0",
-    "csv-parser": "^3.0.0"
+    "csv-parser": "^3.0.0",
+    "ts-jest": "^29.0.3",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@serverless/typescript": "^3.0.0",
     "@types/aws-lambda": "^8.10.71",
     "@types/jest": "^29.1.2",
     "@types/node": "^14.14.25",
+    "@types/uuid": "^8.3.4",
     "aws-sdk-mock": "^5.7.0",
     "esbuild": "^0.14.11",
     "json-schema-to-ts": "^1.5.0",
@@ -31,6 +35,8 @@
     "serverless-esbuild": "^1.23.3",
     "serverless-jest-plugin": "^0.4.0",
     "serverless-offline": "^11.0.3",
+    "serverless-plugin-common-excludes": "^4.0.0",
+    "serverless-plugin-include-dependencies": "^5.0.0",
     "serverless-webpack": "^5.10.0",
     "ts-loader": "^9.4.1",
     "ts-node": "^10.4.0",
@@ -40,5 +46,5 @@
   },
   "author": "The serverless webpack authors (https://github.com/elastic-coders/serverless-webpack)",
   "license": "MIT",
-  "type":"commonjs"
+  "type": "commonjs"
 }

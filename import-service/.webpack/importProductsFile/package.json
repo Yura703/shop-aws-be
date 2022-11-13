@@ -1,0 +1,12 @@
+{
+  "name": "import-service",
+  "version": "1.0.0",
+  "description": "Packaged externals for import-service",
+  "private": true,
+  "scripts": {},
+  "dependencies": {
+    "@middy/core": "^2.5.3",
+    "@middy/http-json-body-parser": "^2.5.3",
+    "aws-sdk": "^2.1230.0"
+  }
+}

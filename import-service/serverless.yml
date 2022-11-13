@@ -6,10 +6,11 @@ useDotenv: true
 custom:
   bucketName: yura703-task5
   webpack: 
-    webpackConfig:  'webpack.config.js'  # Имя файла конфигурации 
-    webpack includeModules:  false  # Конфигурация модулей узла для упаковки 
-    packager:  'npm'  # Packager, который будет использоваться для упаковки ваших внешних модулей 
-    excludeFiles:  src/** /*.test.js  # Предоставить glob для игнорируемых файлов  
+    webpackConfig:  './webpack.config.js'  # Имя файла конфигурации 
+    includeModules: true
+    # webpack includeModules:  false  # Конфигурация модулей узла для упаковки 
+    # packager:  'npm'  # Packager, который будет использоваться для упаковки ваших внешних модулей 
+    # excludeFiles:  src/** /*.test.js  # Предоставить glob для игнорируемых файлов  
 
 provider:
   name: aws
@@ -19,23 +20,72 @@ provider:
   lambdaHashingVersion: 20201221
 
   iamRoleStatements:
-    - Effect: "Allow"
-      Action:
-        - "s3:ListBucket"
+    - Effect: Allow
+      Action: s3:ListBucket
       Resource:
         - arn:aws:s3:::yura703-task5
-    - Effect: "Allow"
+    - Effect: Allow
       Action:
-        - "s3:*"
+        - s3:*
       Resource:
         - arn:aws:s3:::yura703-task5/*
+    - Effect: Allow
+      Action: sqs:*
+      Resource:
+        - Fn::GetAtt: [SQSQueue, Arn]
+    - Effect: Allow
+      Action: sns:*
+      Resource:
+        Ref: SNSTopic      
+
+  environment:
+    SQL_URL:
+      Ref: SQSQueue
+    SNS_ARN:
+      Ref: SNSTopic       
 
 plugins:
   - serverless-webpack
   - serverless-jest-plugin  
+  - serverless-plugin-common-excludes # this should go before serverless-plugin-include-dependencies
+  - serverless-plugin-include-dependencies 
 
 package:
+  patterns:
+    - '!node_modules/**' # no need to add this, this plugin does it for you
   individually: true
+  excludeDevDependencies: false
+
+resources:
+  Resources:
+    SQSQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: yura703-queue
+    SNSTopic:
+      Type: AWS::SNS::Topic
+      Properties:
+        TopicName: yura703-topic
+    SNSHighCountSubscription:
+      Type: AWS::SNS::Subscription
+      Properties:
+        Endpoint: lyurik1978@gmail.com 
+        Protocol: email
+        TopicArn:
+          Ref: SNSTopic   
+        FilterPolicy:
+          countCategory:
+            - High   
+    SNSLowCountSubscription:
+      Type: AWS::SNS::Subscription
+      Properties:        
+        Endpoint: lyurik1978@tut.by 
+        Protocol: email
+        TopicArn:
+          Ref: SNSTopic
+        FilterPolicy:
+          countCategory:
+            - Low        
 
 functions:
   importProductsFile:
@@ -58,7 +108,15 @@ functions:
         event: s3:ObjectCreated:*
         rules:
           - prefix: uploaded/
-        existing: true         
-  
-  
+        existing: true       
+
+  catalogBatchProcess:
+    handler: src/functions/catalogBatchProcess.catalogBatchProcess
+    events:
+      - sqs:
+          batchSize: 5
+          arn:
+            Fn::GetAtt:
+              - SQSQueue
+              - Arn    
   

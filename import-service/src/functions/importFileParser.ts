@@ -9,6 +9,7 @@ let BUCKET = "";
 
 export const importFileParser = async (event: S3Event) => {
   const s3 = new AWS.S3({ region: "eu-west-1" });
+  const sqs = new AWS.SQS();
 
   if (!event.Records) {
     return { statusCode: 404 }
@@ -24,8 +25,17 @@ export const importFileParser = async (event: S3Event) => {
       s3.getObject(params).createReadStream()
       .pipe(parser(["title", "description", "price", "count", "imageId"]))
       .on("data", (item) => {
-        results.push(item)
-      }).on("end", async () => {
+
+        sqs.sendMessage(
+          {
+            QueueUrl: process.env.SQS_URL,
+            MessageBody: JSON.stringify(item),
+          }, () => {
+            console.log('Send message - ' + item);
+          }
+        );        
+      })
+      .on("end", async () => {
         console.log(JSON.stringify(results));
 
         await s3.copyObject({ 
