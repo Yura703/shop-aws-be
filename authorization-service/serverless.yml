@@ -1,0 +1,37 @@
+service: authorization-service
+frameworkVersion: '3'
+useDotenv: true
+
+custom:
+  webpack: 
+    webpackConfig:  'webpack.config.js'  # Имя файла конфигурации 
+    includeModules: true
+    packager: 'npm'
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  stage: dev
+  region: eu-west-1 
+  lambdaHashingVersion: 20201221  
+  environment: {
+      yura703: process.env.yura703
+    }
+
+plugins:
+  - serverless-webpack
+  # - serverless-plugin-common-excludes # this should go before serverless-plugin-include-dependencies
+  # - serverless-plugin-include-dependencies 
+  - serverless-dotenv-plugin
+
+package:
+  # patterns:
+  #   - '!node_modules/**' # no need to add this, this plugin does it for you
+  individually: true
+  # excludeDevDependencies: false
+
+functions:
+  functions:
+  basicAuthorizer:
+    handler: basicAuthorizer.handler   
+  
